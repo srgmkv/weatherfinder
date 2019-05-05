@@ -10,7 +10,7 @@ function SearchForm(props) {
 				onChange={props.handleChange}/>
 				<div className="input-group-append">
 					<button className="btn  bg-warning text-white" type="button"
-					onClick={props.handleClick}
+					onClick={props.butClick}
 					>Button</button>
 				</div>
 			</div>

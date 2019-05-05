@@ -2,6 +2,8 @@ import React from 'react';
 import Weatherinfo from './Weatherinfo';
 import './App.css';
 import Searchform from './Searhform';
+import Favlist from './Favlist';
+import SearchedCities from './Searchedcities';
 
 class App extends React.Component {
 	constructor() {
@@ -13,16 +15,19 @@ class App extends React.Component {
 			userLocation: {
 				lat: null,
 				lon: null
-			}
+			},
+			favcitieslist: [],
+			isSearched: false,
+			searchedCitiesData: []
 		};
 	}
 
 	handleChange = (e) => {
 		const { name, value } = e.target;
-		this.setState({ [name]: value })
+		this.setState({ [name]: value.charAt(0).toUpperCase() + value.slice(1) })
 	}
 
-	toFetchWeatherData = (url) => {
+toFetchWeatherData = (url) => {
 		fetch(url)
 			.then(response => response.json())
 			.then(response => {
@@ -74,13 +79,17 @@ class App extends React.Component {
 	};
 
 	butClick = () => {
+		this.setState({searchedCitiesData: []})
+		
 		fetch('https://raw.githubusercontent.com/srgmkv/citiescont/master/cities.list.json')
 			.then(res => res.json())
 			.then(data => {
 				//console.log(data);
 				const filtered = data.filter(item => item.name === this.state.locationSearch)
-				console.log('filtered', filtered)
-				this.setState({ citiesdata: filtered })
+				//console.log('filtered', filtered)
+				this.setState({ 
+					searchedCitiesData: filtered,
+				 })
 
 			})
 
@@ -93,9 +102,6 @@ class App extends React.Component {
 			<>
 				<div id="header">А теперь - о погоде:</div>
 				<div id="main">
-
-					{/* <button onClick={this.butClick}>city</button> */}
-					<br />
 					<div className="container-fluid">
 						<div className="row">
 							<div className="col-sm-4 border">
@@ -105,8 +111,17 @@ class App extends React.Component {
 							
 								<Searchform 
 								handleChange={this.handleChange}
-								handleClick={this.handleClick}
+								butClick={this.butClick}
 								/>
+								
+								<div className="row">
+									<div className="col-sm-8 border">
+										<SearchedCities data={this.state.searchedCitiesData} />
+									</div>
+									<div className="col-sm-4 border ">
+										<Favlist />
+										</div>
+								</div>
 							</div>
 						</div>
 					</div>
