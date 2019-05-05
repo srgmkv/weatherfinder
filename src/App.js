@@ -31,7 +31,7 @@ class App extends React.Component {
 					data: response,
 					dataLoaded: true
 				})
-				console.log(this.state.data.wind.speed)
+				//console.log(this.state.data.wind.speed)
 			})
 	}
 
@@ -68,7 +68,7 @@ class App extends React.Component {
 			})
 	}
 	componentWillMount() {
-		this.getUserLocalWeather();
+		//this.getUserLocalWeather();
 		//this.handleClick();
 
 	};
@@ -89,6 +89,7 @@ class App extends React.Component {
 
 	render() {
 		const { dataLoaded, data } = this.state
+		console.log(data.cod)
 		return (
 			<>
 				<div id="header">А теперь - о погоде:</div>
@@ -98,7 +99,7 @@ class App extends React.Component {
 					<button onClick={this.butClick}>city</button>
 					<br />
 
-					{dataLoaded && data.cod === 200 ? <Weatherinfo weatherData={data} /> : <div className="spinner-border text-danger"></div>}
+					{data.cod === 200 && <Weatherinfo weatherData={data} />}  {/* <div className="spinner-border text-danger"></div> */}
 					
 				</div>
 			</>
