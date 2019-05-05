@@ -31,7 +31,7 @@ class App extends React.Component {
 					data: response,
 					dataLoaded: true
 				})
-				//console.log(this.state.data.wind.speed)
+				console.log(this.state.data.wind.speed)
 			})
 	}
 
