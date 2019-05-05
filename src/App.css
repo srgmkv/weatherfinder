@@ -15,3 +15,13 @@ ymaps{
   margin-top: 60px;
 }
 
+@media (min-width: 700px) {
+	.input-group{
+		width: 350px !important;
+	}
+}
+
+.col-centered{
+    margin: 0 auto;
+}
+

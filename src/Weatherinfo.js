@@ -9,7 +9,7 @@ export default class WeatherInfo extends React.Component {
 
 		return (
 			<>
-				<p>Погода в {name} такова:<br />
+				<p className="pt-2 pl-1">Погода в {name} такова:<br />
 					ветер: {wind.speed}<br />
 					температура: {Math.round(main.temp - 273)}<br />
 					влажность: {main.humidity}<br />

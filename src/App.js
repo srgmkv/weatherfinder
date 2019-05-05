@@ -1,7 +1,7 @@
 import React from 'react';
 import Weatherinfo from './Weatherinfo';
 import './App.css';
-
+import Searchform from './Searhform';
 
 class App extends React.Component {
 	constructor() {
@@ -17,7 +17,7 @@ class App extends React.Component {
 		};
 	}
 
-	handleCahnge = (e) => {
+	handleChange = (e) => {
 		const { name, value } = e.target;
 		this.setState({ [name]: value })
 	}
@@ -31,7 +31,7 @@ class App extends React.Component {
 					data: response,
 					dataLoaded: true
 				})
-				console.log(this.state.data.wind.speed)
+				//console.log(this.state.data.wind.speed)
 			})
 	}
 
@@ -99,14 +99,14 @@ class App extends React.Component {
 					<div className="container-fluid">
 						<div className="row">
 							<div className="col-sm-4 border">
-								{dataLoaded && data.cod === 200 ? <Weatherinfo weatherData={data} /> : <div className="spinner-border text-danger"></div>}
+								{dataLoaded && data.cod === 200 ? <Weatherinfo weatherData={data} /> : <p>{data.message}</p>}
 							</div>
 							<div className="col-sm-8 border">
-								<div >
-									<input type="text" name="locationSearch" onChange={this.handleCahnge} 
-									className="mx-auto d-inline-block border"/>
-								<button className="mx-auto d-inline-block border" onClick={this.handleClick}>Search</button>
-								</div>
+							
+								<Searchform 
+								handleChange={this.handleChange}
+								handleClick={this.handleClick}
+								/>
 							</div>
 						</div>
 					</div>
