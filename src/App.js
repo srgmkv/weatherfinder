@@ -97,9 +97,14 @@ class App extends React.Component {
 					<button onClick={this.handleClick}>Search</button>
 					<button onClick={this.butClick}>city</button>
 					<br />
-
-					{dataLoaded && data.cod === 200 ? <Weatherinfo weatherData={data} /> : <div className="spinner-border text-danger"></div>}
-					
+					<div className="container-fluid">
+						<div className="row">
+						<div className="col-sm-4 border">
+						{dataLoaded && data.cod === 200 ? <Weatherinfo weatherData={data} /> : <div className="spinner-border text-danger"></div>}
+					</div>
+					<div className="col-sm-8 border">8889899</div>
+					</div>
+					</div>
 				</div>
 			</>
 		)
