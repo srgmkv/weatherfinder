@@ -1,0 +1,17 @@
+ymaps{
+  border-radius: 15px;
+}
+
+#header {
+  top: 0;
+  height: 50px;
+  width: 100%;
+  background-color: chocolate;
+  position: fixed;
+  z-index: 100;
+}
+
+#main {
+  margin-top: 60px;
+}
+
