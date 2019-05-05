@@ -93,17 +93,22 @@ class App extends React.Component {
 			<>
 				<div id="header">А теперь - о погоде:</div>
 				<div id="main">
-					<input type="text" name="locationSearch" onChange={this.handleCahnge} />
-					<button onClick={this.handleClick}>Search</button>
-					<button onClick={this.butClick}>city</button>
+
+					{/* <button onClick={this.butClick}>city</button> */}
 					<br />
 					<div className="container-fluid">
 						<div className="row">
-						<div className="col-sm-4 border">
-						{dataLoaded && data.cod === 200 ? <Weatherinfo weatherData={data} /> : <div className="spinner-border text-danger"></div>}
-					</div>
-					<div className="col-sm-8 border">8889899</div>
-					</div>
+							<div className="col-sm-4 border">
+								{dataLoaded && data.cod === 200 ? <Weatherinfo weatherData={data} /> : <div className="spinner-border text-danger"></div>}
+							</div>
+							<div className="col-sm-8 border">
+								<div >
+									<input type="text" name="locationSearch" onChange={this.handleCahnge} 
+									className="mx-auto d-inline-block border"/>
+								<button className="mx-auto d-inline-block border" onClick={this.handleClick}>Search</button>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</>
