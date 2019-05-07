@@ -4,7 +4,7 @@ import './App.css';
 import Searchform from './Searhform';
 import Favlist from './Favlist';
 import LocalWeatherBlock from './Locweatherblock';
-import _ from 'lodash'
+import unionBy from 'lodash.unionby';
 //import SearchResult from './SearchResult';
 
 class App extends React.Component {
@@ -37,18 +37,23 @@ class App extends React.Component {
 	}
 
 	addToFav = () => {
-		const id = this.state.requestCurrentWeather.id
-		const location = this.state.requestCurrentWeather.name;
+		const { id, name, main } = this.state.requestCurrentWeather;
 		const itemToPush = [{
-			cityName: location,
+			cityName: name,
 			locationId: id,
+			currentTemp: `${Math.round(main.temp - 273)} °C`
 			//id: this.state.favCitieslist.length
 		}];
 
 		const favList = [...this.state.favCitieslist];
-		const updList = _.unionBy(favList, itemToPush, 'locationId');
+		const updList = unionBy(favList, itemToPush, 'locationId');
 		this.setState({ favCitieslist: updList });
 	}
+
+	updateFavListByTemp = (list) => {
+		this.setState({ favCitieslist: list })
+	}
+
 
 	removeFromFavList = (id) => {
 		const favList = [...this.state.favCitieslist];
@@ -72,13 +77,14 @@ class App extends React.Component {
 			})
 	};
 
+
 	handleClick = (location = this.state.requestedLocation) => {
 		const apikey = '2b0c757f5810cdb1eb3a945f283be600';
 		const preUrl = 'http://api.openweathermap.org/data/2.5/';
 		const url1 = `${preUrl}weather?q=${location}&appid=${apikey}`;
 		this.fetchToState(url1, 'requestCurrentWeather', 'requestDataLoaded');
 
-		const url2 = `${preUrl}forecast?q=${location}&appid=${apikey}`;
+		const url2 = `${preUrl}forecast/hourly?q=${location}&appid=${apikey}`;
 		this.fetchToState(url2, 'requestForecast', 'requestDataLoaded');
 
 	}
@@ -126,12 +132,17 @@ class App extends React.Component {
 			})
 	
 	}*/
-
+	isEmpty = (obj) => {
+		for (var key in obj) {
+			return false;
+		}
+		return true;
+	}
 
 	render() {
 		const { localDataLoaded, localCurrentWeather,
-			requestDataLoaded, requestCurrentWeather } = this.state;
-
+			requestDataLoaded, requestCurrentWeather, requestForecast } = this.state;
+	
 		return (
 			<>
 				<div className="header pl-4 pt-2">All you want to know about weather</div>
@@ -158,21 +169,27 @@ class App extends React.Component {
 											handleClick={this.handleClick}
 										/>
 										<span>Searching result:</span>
-										{requestDataLoaded && requestCurrentWeather.cod === 200 &&
+										{requestForecast.cod === '200' &&
+											requestCurrentWeather.cod === 200 ?
 
 											<Weatherinfo
 												weatherData={requestCurrentWeather}
 												addToFav={this.addToFav}
 												removeFromFavList={this.removeFromFavList}
-												favCitieslist={this.state.favCitieslist} />
+												favCitieslist={this.state.favCitieslist}
+												requestForecast={this.state.requestForecast}
+											/>
+											: 'Loading'
 										}
 									</div>
-									<div className="col-sm-4 border ">
-										{this.state.favCitieslist.length > 0 && <Favlist
-											citiesList={this.state.favCitieslist}
-											removeFromFavList={this.removeFromFavList}
-											handleClick={this.handleClick}
-										/>}
+									<div className="col-sm-4 border">
+										{this.state.favCitieslist.length > 0 &&
+											<Favlist
+												citiesList={this.state.favCitieslist}
+												removeFromFavList={this.removeFromFavList}
+												handleClick={this.handleClick}
+												updateFavListByTemp={this.updateFavListByTemp}
+											/>}
 									</div>
 								</div>
 							</div>

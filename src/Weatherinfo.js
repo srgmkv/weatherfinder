@@ -1,5 +1,6 @@
 import React from 'react';
 //import { OnMap } from './Onmap';
+import Forecastblock from './Forecastblock';
 
 export default class WeatherInfo extends React.Component {
 
@@ -24,8 +25,10 @@ export default class WeatherInfo extends React.Component {
 					<div className="favico">
 						<img src={starIco} alt=""
 							onClick={itemById.length ? () => this.props.removeFromFavList(itemById[0].locationId) : this.props.addToFav}
-							title="Add to favorite list" width="20px" /></div>
+							title={itemById.length  ? "Remove from Favorites" : "Add to Favorites"} width="20px" /></div>
 				</div>
+				<Forecastblock 
+				requestForecast={this.props.requestForecast}/>
 			</>
 		)
 	}
