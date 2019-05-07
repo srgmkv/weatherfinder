@@ -1,14 +1,17 @@
-ymaps{
+ymaps {
   border-radius: 15px;
 }
 
-#header {
+.header {
   top: 0;
   height: 50px;
   width: 100%;
   background-color: chocolate;
   position: fixed;
   z-index: 100;
+  color: white;
+  font-weight: bold;
+  text-align: center;
 }
 
 #main {
@@ -16,12 +19,33 @@ ymaps{
 }
 
 @media (min-width: 700px) {
-	.input-group{
-		width: 350px !important;
-	}
+  .input-group {
+    width: 350px !important;
+  }
 }
 
-.col-centered{
-    margin: 0 auto;
+.col-centered {
+  margin: 0 auto;
+}
+
+.curr-temp, .favico {
+  display: inline-block;
+}
+
+.curr-temp {
+  width: 90%;
+}
+
+#wrap{
+	display		: table;
+}
+.favico {
+	display		: table-cell;
+	vertical-align	: middle;
+}
+
+p {
+ 
+  
 }
 

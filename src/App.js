@@ -3,6 +3,7 @@ import Weatherinfo from './Weatherinfo';
 import './App.css';
 import Searchform from './Searhform';
 import Favlist from './Favlist';
+import LocalWeatherBlock from './Locweatherblock';
 import _ from 'lodash'
 //import SearchResult from './SearchResult';
 
@@ -10,21 +11,22 @@ class App extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			locationSearch: null,
-			localWeatherData: {},
+			requestedLocation: 'Moscow',
+			localCurrentWeather: {},
+			localForecast: {},
 			localDataLoaded: false,
-			userLocation: {
+			localUserData: {
 				lat: null,
 				lon: null,
 				locationName: null
 			},
+
 			favCitieslist: [],
+
 			requestDataLoaded: false,
-			requestedWeatherData: {
-				currentWeather: {},
-				hourlyForecast: {},
-				fiveDay3hoursForecast: {}
-			},
+			requestCurrentWeather: {},
+			requestForecast: {},
+
 			searchedCitiesData: []
 		};
 	}
@@ -35,12 +37,12 @@ class App extends React.Component {
 	}
 
 	addToFav = () => {
-		const id = this.state.requestedWeatherData.currentWeather.id
-		const location = this.state.requestedWeatherData.currentWeather.name;
+		const id = this.state.requestCurrentWeather.id
+		const location = this.state.requestCurrentWeather.name;
 		const itemToPush = [{
 			cityName: location,
 			locationId: id,
-			id: this.state.favCitieslist.length
+			//id: this.state.favCitieslist.length
 		}];
 
 		const favList = [...this.state.favCitieslist];
@@ -49,71 +51,35 @@ class App extends React.Component {
 	}
 
 	removeFromFavList = (id) => {
-		console.log('id', id)
-
 		const favList = [...this.state.favCitieslist];
-
-		const updList = favList.filter(item => item.id !== id)
-			.map((item, index) => {
-				item.id = index
-				return item
-			});
+		const updList = favList.filter(item => item.locationId !== id)
+		/* .map((item, index) => {
+			item.id = index
+			return item
+		}); */
 		this.setState({ favCitieslist: updList });
 	}
 
-	handleClick = (datatype = 'current', location = this.state.locationSearch) => {
-		//const location = this.state.locationSearch
-		//datatype === 'current' by default || 'hourly' || '5d3h'
-		//this.setState({ dataLoaded: false })
+	fetchToState = (url, key, dataTypeLoaded, func) => {
+		this.setState({ [dataTypeLoaded]: false });
+		fetch(url)
+			.then(response => response.json()).then(response => {
+				this.setState({
+					[key]: response,
+					[dataTypeLoaded]: true
+				});
+				//func()
+			})
+	};
 
+	handleClick = (location = this.state.requestedLocation) => {
 		const apikey = '2b0c757f5810cdb1eb3a945f283be600';
 		const preUrl = 'http://api.openweathermap.org/data/2.5/';
-		let url;
-		//console.log('datatype', datatype)
+		const url1 = `${preUrl}weather?q=${location}&appid=${apikey}`;
+		this.fetchToState(url1, 'requestCurrentWeather', 'requestDataLoaded');
 
-		if (datatype === 'current') {
-
-			url = `${preUrl}weather?q=${location}&appid=${apikey}`;
-			fetch(url)
-				.then(response => response.json()).then(response => {
-					this.setState({
-						requestedWeatherData: {
-							currentWeather: response,
-							hourlyForecast: this.state.requestedWeatherData.hourlyForecast,
-							fiveDay3hoursForecast: this.state.requestedWeatherData.fiveDay3hoursForecast
-						},
-						requestDataLoaded: true
-					})
-				})
-		} else if (datatype === 'hourly') {
-			url = `${preUrl}forecast/hourly?q=${location}&appid=${apikey}`
-			fetch(url)
-				.then(response => response.json()).then(response => {
-					this.setState({
-						requestedWeatherData: {
-							currentWeather: this.state.requestedWeatherData.currentWeather,
-							hourlyForecast: response,
-							fiveDay3hoursForecast: this.state.requestedWeatherData.fiveDay3hoursForecast
-						},
-						requestDataLoaded: true
-					})
-				})
-		} else {
-			url = `${preUrl}forecast?q=${location}&appid=${apikey}`
-			fetch(url)
-				.then(response => response.json()).then(response => {
-					this.setState({
-						requestedWeatherData: {
-							currentWeather: this.state.requestedWeatherData.currentWeather,
-							hourlyForecast: this.state.requestedWeatherData.hourlyForecast,
-							fiveDay3hoursForecast: response
-						},
-						requestDataLoaded: true
-					})
-				})
-		}
-
-
+		const url2 = `${preUrl}forecast?q=${location}&appid=${apikey}`;
+		this.fetchToState(url2, 'requestForecast', 'requestDataLoaded');
 
 	}
 
@@ -123,91 +89,90 @@ class App extends React.Component {
 
 		fetch(`https://json.geoiplookup.io/`)
 			.then(res => res.json()).then(resp => {
-
 				this.setState({
-					userLocation: {
+					localUserData: {
 						lat: resp.latitude,
 						lon: resp.longitude,
 						locationName: resp.city
 					}
 				});
 
-				const { lat, lon } = this.state.userLocation;
-				const url = `${preUrl}weather?lat=${lat}&lon=${lon}&appid=${apikey}`;
-
-				fetch(url)
-					.then(response => response.json()).then(response => {
-						this.setState({
-							localWeatherData: response,
-							localDataLoaded: true
-						})
-					});
+				const { lat, lon } = this.state.localUserData;
+				const url1 = `${preUrl}weather?lat=${lat}&lon=${lon}&appid=${apikey}`;
+				this.fetchToState(url1, 'localCurrentWeather', 'localDataLoaded');
+				const url2 = `${preUrl}forecast?lat=${lat}&lon=${lon}&appid=${apikey}`;
+				this.fetchToState(url2, 'localForecast', 'localDataLoaded');
 			})
 	}
 
 	componentWillMount() {
 		this.getUserLocalWeatherData();
+		this.handleClick();
 
 	};
 
 	/*butClick = () => {
 		this.setState({ searchedCitiesData: [] })
-
+	
 		fetch('https://raw.githubusercontent.com/srgmkv/citiescont/master/cities.list.json')
 			.then(res => res.json())
 			.then(data => {
-				const filtered = data.filter(item => item.name === this.state.locationSearch)
+				const filtered = data.filter(item => item.name === this.state.requestedLocation)
 				//console.log('filtered', filtered)
 				this.setState({
 					searchedCitiesData: filtered,
 				})
-
+	
 			})
-
+	
 	}*/
 
 
 	render() {
-		const { localDataLoaded, localWeatherData, requestDataLoaded } = this.state;
-		const { currentWeather } = this.state.requestedWeatherData;
+		const { localDataLoaded, localCurrentWeather,
+			requestDataLoaded, requestCurrentWeather } = this.state;
 
 		return (
 			<>
-				<div id="header">А теперь - о погоде:</div>
+				<div className="header pl-4 pt-2">All you want to know about weather</div>
 				<div id="main">
-					<div className="container-fluid">
+					<div className="container">
 						<div className="row">
-							<div className="col-sm-4 border LOCAL">
-								{localDataLoaded && localWeatherData.cod === 200 ?
-									<Weatherinfo weatherData={localWeatherData}
-										handleClick={this.handleClick}
+							<div className="col-sm-3 border LOCAL">
+								{localDataLoaded && localCurrentWeather.cod === 200 ?
+									<LocalWeatherBlock
+										weatherData={localCurrentWeather}
 										addToFav={this.addToFav}
 
 									/> : <div className="spinner-grow spinner-grow-sm"></div>}
 							</div>
-							<div className="col-sm-8 border">
+							<div className="col-sm-9">
 
-								<Searchform
-									handleChange={this.handleChange}
-									handleClick={this.handleClick}
-								/>
+
 
 								<div className="row">
-									<div className="col-sm-8 border REQUEST">
-										{requestDataLoaded && currentWeather.cod === 200 &&
-											<>
-												<p>Searching result:</p>
-												<Weatherinfo weatherData={currentWeather}
-													handleClick={this.handleClick}
-													addToFav={this.addToFav} />
-											</>
+									<div className="col-sm-8 REQUEST">
+
+										<Searchform
+											handleChange={this.handleChange}
+											handleClick={this.handleClick}
+										/>
+										<span>Searching result:</span>
+										{requestDataLoaded && requestCurrentWeather.cod === 200 &&
+
+											<Weatherinfo
+												weatherData={requestCurrentWeather}
+												addToFav={this.addToFav}
+												removeFromFavList={this.removeFromFavList}
+												favCitieslist={this.state.favCitieslist} />
 										}
 									</div>
 									<div className="col-sm-4 border ">
-										<Favlist
+										{this.state.favCitieslist.length > 0 && <Favlist
 											citiesList={this.state.favCitieslist}
 											removeFromFavList={this.removeFromFavList}
-										/>
+											handleClick={this.handleClick}
+										/>}
 									</div>
 								</div>
 							</div>

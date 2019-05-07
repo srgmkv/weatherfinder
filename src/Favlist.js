@@ -6,22 +6,23 @@ class Favlist extends React.Component {
   render() {
     const list = this.props.citiesList;
     //console.log('list', list);
-    const favList = list.map((item, index) => {
+    const favList = list.map((item) => {
       return (
       <React.Fragment key={item.locationId} >
-      <li id={index}>{item.cityName}
-      <span className="ml-3"onClick={() => this.props.removeFromFavList(index)}>&times;</span></li>
-      
+        <div className="item-favlist ml-2" >
+      <span onClick={() => this.props.handleClick(item.cityName)}>{item.cityName}</span>
+      <span className="ml-3"onClick={() => this.props.removeFromFavList(item.locationId)}>&times;</span>
+      </div>
       </React.Fragment>
       )
     })
 
     return (
       <>
-      <p className="bg-success pl-2 text-white">Favorites</p>
-      <ul>
+      <p className="bg-success pt-0 text-white text-center rounded-sm">Favorites</p>
+      
         {favList}
-      </ul>
+      
       </>
       
     )
