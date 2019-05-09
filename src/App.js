@@ -142,56 +142,47 @@ class App extends React.Component {
 	render() {
 		const { localDataLoaded, localCurrentWeather,
 			requestDataLoaded, requestCurrentWeather, requestForecast } = this.state;
-	
+
 		return (
 			<>
 				<div className="header pl-4 pt-2">All you want to know about weather</div>
-				<div id="main">
+				<div id="main"><div className="local weather">
+					{localDataLoaded && localCurrentWeather.cod === 200 ?
+						<LocalWeatherBlock
+							weatherData={localCurrentWeather}
+							addToFav={this.addToFav}
+
+						/> : <div className="spinner-grow spinner-grow-sm"></div>}
+				</div>
 					<div className="container">
 						<div className="row">
-							<div className="col-sm-3 border LOCAL">
-								{localDataLoaded && localCurrentWeather.cod === 200 ?
-									<LocalWeatherBlock
-										weatherData={localCurrentWeather}
+							<div className="col-sm-9 border">
+								<Searchform
+									handleChange={this.handleChange}
+									handleClick={this.handleClick}
+								/>
+								<span>Searching result:</span>
+								{requestForecast.cod === '200' &&
+									requestCurrentWeather.cod === 200 ?
+
+									<Weatherinfo
+										weatherData={requestCurrentWeather}
 										addToFav={this.addToFav}
-
-									/> : <div className="spinner-grow spinner-grow-sm"></div>}
+										removeFromFavList={this.removeFromFavList}
+										favCitieslist={this.state.favCitieslist}
+										requestForecast={this.state.requestForecast}
+									/>
+									: 'Loading'
+								}
 							</div>
-							<div className="col-sm-9">
-
-
-
-								<div className="row">
-									<div className="col-sm-8 REQUEST">
-
-										<Searchform
-											handleChange={this.handleChange}
-											handleClick={this.handleClick}
-										/>
-										<span>Searching result:</span>
-										{requestForecast.cod === '200' &&
-											requestCurrentWeather.cod === 200 ?
-
-											<Weatherinfo
-												weatherData={requestCurrentWeather}
-												addToFav={this.addToFav}
-												removeFromFavList={this.removeFromFavList}
-												favCitieslist={this.state.favCitieslist}
-												requestForecast={this.state.requestForecast}
-											/>
-											: 'Loading'
-										}
-									</div>
-									<div className="col-sm-4 border">
-										{this.state.favCitieslist.length > 0 &&
-											<Favlist
-												citiesList={this.state.favCitieslist}
-												removeFromFavList={this.removeFromFavList}
-												handleClick={this.handleClick}
-												updateFavListByTemp={this.updateFavListByTemp}
-											/>}
-									</div>
-								</div>
+							<div className="col-sm-3 border">
+								{this.state.favCitieslist.length > 0 &&
+									<Favlist
+										citiesList={this.state.favCitieslist}
+										removeFromFavList={this.removeFromFavList}
+										handleClick={this.handleClick}
+										updateFavListByTemp={this.updateFavListByTemp}
+									/>}
 							</div>
 						</div>
 					</div>
