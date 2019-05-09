@@ -6,7 +6,7 @@ ymaps {
   top: 0;
   height: 50px;
   width: 100%;
-  background-color: chocolate;
+  background-color: rgb(223, 141, 83);
   position: fixed;
   z-index: 100;
   color: white;
