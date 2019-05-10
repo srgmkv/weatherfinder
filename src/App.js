@@ -72,7 +72,7 @@ class App extends React.Component {
 	//обрабатываем поисковой запрос
 	handleClick = (location = this.state.requestedLocation) => {
 		const apikey = '2b0c757f5810cdb1eb3a945f283be600';
-		const preUrl = 'http://api.openweathermap.org/data/2.5/';
+		const preUrl = 'https://api.openweathermap.org/data/2.5/';
 		const url1 = `${preUrl}weather?q=${location}&appid=${apikey}`;
 		this.fetchToState(url1, 'requestCurrentWeather', 'requestDataLoaded'); //запрашиваем данные о текущей погоде и обновляем стейт
 
@@ -83,7 +83,7 @@ class App extends React.Component {
 	//данные метод запрашивет погоду по локации пользователя
 	getUserLocalWeatherData = () => {
 		const apikey = '2b0c757f5810cdb1eb3a945f283be600';
-		const preUrl = 'http://api.openweathermap.org/data/2.5/'
+		const preUrl = 'https://api.openweathermap.org/data/2.5/'
 
 		fetch(`https://json.geoiplookup.io/`) // обращаемся к API, который определяет ip юзера 
 			.then(res => res.json()).then(resp => { // и определяет по ним его локацию

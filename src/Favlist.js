@@ -8,7 +8,7 @@ class Favlist extends React.Component {
     const list = this.props.citiesList;
     const listId = list.map(item => item.locationId).toString() //извлекаем id городов и делаем строку
     const apikey = '2b0c757f5810cdb1eb3a945f283be600';
-    const preUrl = 'http://api.openweathermap.org/data/2.5/';
+    const preUrl = 'https://api.openweathermap.org/data/2.5/';
     const url = `${preUrl}group?id=${listId}&appid=${apikey}`;
 
     fetch(url).then(resp => resp.json()).then(resp => { //запрашиваем данные для списка городов и обновляем избранное
