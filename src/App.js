@@ -10,7 +10,7 @@ class App extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			localCurrentWeather: {}, //в local- здесь будут данные о погоде в локации юзера
+			localCurrentWeather: {}, //здесь сохраним данные о погоде в локации юзера
 			localForecast: {},  // прогноз по локации юзера
 			localUserData: { // данные о его локации
 				lat: null,
