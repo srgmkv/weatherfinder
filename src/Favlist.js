@@ -24,23 +24,24 @@ class Favlist extends React.Component {
     })
   }
 
-   componentDidMount() {
-     this.updFavList();
+//обновляем показания температуры в избранных городах каждые 15 минут
+  componentDidMount() {
+    this.updFavList();
     setInterval(() => {
       this.updFavList();
-    }, 20000000);
-  } 
+    }, 900000);
+  }
 
   render() {
     const list = this.props.citiesList;
     const favList = list.map((item) => {
       return (
         <React.Fragment key={item.locationId} >
-          <div className="item-favlist ml-2" >
+          <div className=" favlist-item ml-0 pl-0" >
+            <span className="ml-0 remove" title="remove from list" onClick={() => this.props.removeFromFavList(item.locationId)}>&times;</span>
             <span onClick={() => this.props.handleClick(item.cityName)}>
               {item.cityName} {item.currentTemp}
             </span>
-            <span className="ml-3" onClick={() => this.props.removeFromFavList(item.locationId)}>&times;</span>
           </div>
         </React.Fragment>
       )
@@ -48,8 +49,8 @@ class Favlist extends React.Component {
 
     return (
       <>
-        <p className="bg-success pt-0 text-white text-center rounded-sm">Favorites </p>
-        <span onClick={this.updFavList}>Update </span>
+        <div className="bg-success text-white text-center rounded-sm mb-1">Favorites </div>
+        {/*<span onClick={this.updFavList}>Update </span>*/}
         {favList}
 
       </>

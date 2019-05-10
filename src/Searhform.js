@@ -11,7 +11,7 @@ function SearchForm(props) {
 				<div className="input-group-append">
 					<button className=" mr-3 btn  bg-warning text-white" type="button"
 					onClick={() => props.handleClick()}
-					>Button</button>
+					>Search</button>
 				</div>
 			</div>
 		</>

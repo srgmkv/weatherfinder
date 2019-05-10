@@ -11,7 +11,7 @@ class App extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			requestedLocation: 'Moscow',
+			requestedLocation: "Moscow",
 			localCurrentWeather: {},
 			localForecast: {},
 			localDataLoaded: false,
@@ -48,10 +48,12 @@ class App extends React.Component {
 		const favList = [...this.state.favCitieslist];
 		const updList = unionBy(favList, itemToPush, 'locationId');
 		this.setState({ favCitieslist: updList });
+		localStorage.setItem('favlist', JSON.stringify(updList));
 	}
 
 	updateFavListByTemp = (list) => {
-		this.setState({ favCitieslist: list })
+		this.setState({ favCitieslist: list });
+		localStorage.setItem('favlist', JSON.stringify(list));
 	}
 
 
@@ -63,6 +65,7 @@ class App extends React.Component {
 			return item
 		}); */
 		this.setState({ favCitieslist: updList });
+		localStorage.setItem('favlist', JSON.stringify(updList));
 	}
 
 	fetchToState = (url, key, dataTypeLoaded, func) => {
@@ -114,24 +117,11 @@ class App extends React.Component {
 	componentWillMount() {
 		this.getUserLocalWeatherData();
 		this.handleClick();
+		const favlist = JSON.parse(localStorage.getItem('favlist'));
+		if (favlist) this.setState({ favCitieslist: favlist });
 
 	};
 
-	/*butClick = () => {
-		this.setState({ searchedCitiesData: [] })
-	
-		fetch('https://raw.githubusercontent.com/srgmkv/citiescont/master/cities.list.json')
-			.then(res => res.json())
-			.then(data => {
-				const filtered = data.filter(item => item.name === this.state.requestedLocation)
-				//console.log('filtered', filtered)
-				this.setState({
-					searchedCitiesData: filtered,
-				})
-	
-			})
-	
-	}*/
 	isEmpty = (obj) => {
 		for (var key in obj) {
 			return false;
@@ -140,30 +130,31 @@ class App extends React.Component {
 	}
 
 	render() {
-		const { localDataLoaded, localCurrentWeather,
-			requestDataLoaded, requestCurrentWeather, requestForecast } = this.state;
+		const { localCurrentWeather,
+			requestCurrentWeather, requestForecast } = this.state;
 
 		return (
 			<>
-				<div className="header pl-4 pt-2">All you want to know about weather</div>
-				<div id="main"><div className="local weather">
-					{localDataLoaded && localCurrentWeather.cod === 200 ?
-						<LocalWeatherBlock
-							weatherData={localCurrentWeather}
-							addToFav={this.addToFav}
-
-						/> : <div className="spinner-grow spinner-grow-sm"></div>}
-				</div>
-					<div className="container">
+				<div className="header pl-4 pt-2 m-0">All you want to know about weather</div>
+				<div className="main mb-2">
+					
+					<div className="container-fluid">
 						<div className="row">
-							<div className="col-sm-9 border">
+							<div className="col-sm-10  px-1">
+								<div className="local weather px-2 py-1">
+						{localCurrentWeather.cod === 200 ?
+							<LocalWeatherBlock
+								weatherData={localCurrentWeather}
+								addToFav={this.addToFav}
+
+							/> : <div className="spinner-grow spinner-grow-sm"></div>}
+					</div>
 								<Searchform
 									handleChange={this.handleChange}
 									handleClick={this.handleClick}
 								/>
-								<span>Searching result:</span>
 								{requestForecast.cod === '200' &&
-									requestCurrentWeather.cod === 200 ?
+									requestCurrentWeather.cod === 200 &&
 
 									<Weatherinfo
 										weatherData={requestCurrentWeather}
@@ -172,10 +163,10 @@ class App extends React.Component {
 										favCitieslist={this.state.favCitieslist}
 										requestForecast={this.state.requestForecast}
 									/>
-									: 'Loading'
+									
 								}
 							</div>
-							<div className="col-sm-3 border">
+							<div className="col-sm-2 m-0 p-0 pb-2 favlist ">
 								{this.state.favCitieslist.length > 0 &&
 									<Favlist
 										citiesList={this.state.favCitieslist}
