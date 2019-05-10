@@ -1,5 +1,5 @@
 import React from 'react';
-
+//компонент для отображения поля поиска и обработки нажатия на кнопку
 function SearchForm(props) {
 	return (
 		<>
@@ -9,7 +9,7 @@ function SearchForm(props) {
 				name="requestedLocation"
 				onChange={props.handleChange}/>
 				<div className="input-group-append">
-					<button className=" mr-3 btn  bg-warning text-white" type="button"
+					<button className="search-but mr-3 btn  bg-warning text-white" type="button"
 					onClick={() => props.handleClick()}
 					>Search</button>
 				</div>
