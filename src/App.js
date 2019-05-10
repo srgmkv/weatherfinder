@@ -65,9 +65,16 @@ class App extends React.Component {
 		fetch(url)
 			.then(response => response.json()).then(response => {
 				this.setState({
+<<<<<<< HEAD
 					[key]: response,
 					[dataTypeLoaded]: true
 				});
+=======
+					data: response,
+					dataLoaded: true
+				})
+				//console.log(this.state.data.wind.speed)
+>>>>>>> master
 			})
 	};
 
@@ -104,6 +111,12 @@ class App extends React.Component {
 				this.fetchToState(url2, 'localForecast', 'localDataLoaded');
 			})
 	}
+<<<<<<< HEAD
+=======
+	componentWillMount() {
+		//this.getUserLocalWeather();
+		//this.handleClick();
+>>>>>>> master
 
 	componentWillMount() {
 		this.getUserLocalWeatherData(); //при загрузке показываем погоду в локации юзера
@@ -112,6 +125,7 @@ class App extends React.Component {
 	};
 
 	render() {
+<<<<<<< HEAD
 		const { localCurrentWeather,
 			requestCurrentWeather, requestForecast } = this.state;
 
@@ -159,6 +173,21 @@ class App extends React.Component {
 							</div>
 						</div>
 					</div>
+=======
+		const { dataLoaded, data } = this.state
+		console.log(data.cod)
+		return (
+			<>
+				<div id="header">А теперь - о погоде:</div>
+				<div id="main">
+					<input type="text" name="locationSearch" onChange={this.handleCahnge} />
+					<button onClick={this.handleClick}>Search</button>
+					<button onClick={this.butClick}>city</button>
+					<br />
+
+					{data.cod === 200 && <Weatherinfo weatherData={data} />}  {/* <div className="spinner-border text-danger"></div> */}
+					
+>>>>>>> master
 				</div>
 			</>
 		)
