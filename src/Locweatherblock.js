@@ -1,7 +1,7 @@
 import React from 'react';
 
-/*компонент для отображения текущей погоды в локации пользователя.
-Это похоже на компонент WeatherInfo, но он немного кастомизирован */
+/* Компонент для отображения текущей погоды в локации пользователя.
+Он похож на компонент WeatherInfo, но его функциональность отличается. */
 class LocalWeatherBlock extends React.Component {
 	render() {
 		const { name, main, wind, weather } = this.props.weatherData

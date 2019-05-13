@@ -4,7 +4,7 @@ import Weatherinfo from './Weatherinfo'; // компонент рендерит 
 import LocalWeatherBlock from './Locweatherblock'; //рендерит текущую погоду в локации юзера
 import Searchform from './Searhform'; // рендерит форму для ввода поискового запроса
 import Favlist from './Favlist'; // рендерит список избранных городов
-import unionBy from 'lodash.unionby'; // возьмем ф-ю для добалвения уникального значения в массив
+import unionBy from 'lodash.unionby'; // возьмем ф-ю для добавления значения в массив, если оно уникально
 
 class App extends React.Component {
 	constructor() {
