@@ -8,6 +8,8 @@
 # testing
 /coverage
 
+/src/Open-weather-main-page.png
+
 # misc
 .DS_Store
 .env.local
