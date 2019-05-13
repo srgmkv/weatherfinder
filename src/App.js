@@ -1,9 +1,10 @@
 import React from 'react';
-import Weatherinfo from './Weatherinfo';
 import './App.css';
-import Searchform from './Searhform';
-import Favlist from './Favlist';
-import LocalWeatherBlock from './Locweatherblock';
+import Weatherinfo from './Weatherinfo'; // компонент рендерит погоду и прогноз в искомом городе
+import LocalWeatherBlock from './Locweatherblock'; //рендерит текущую погоду в локации юзера
+import Searchform from './Searhform'; // рендерит форму для ввода поискового запроса
+import Favlist from './Favlist'; // рендерит список избранных городов
+
 import unionBy from 'lodash.unionby';
 
 class App extends React.Component {
