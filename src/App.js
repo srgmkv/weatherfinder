@@ -76,7 +76,7 @@ class App extends React.Component {
 		const url1 = `${preUrl}weather?q=${location}&appid=${apikey}`;
 		this.fetchToState(url1, 'requestCurrentWeather', 'requestDataLoaded'); //запрашиваем данные о текущей погоде и обновляем стейт
 
-		const url2 = `${preUrl}forecast/hourly?q=${location}&appid=${apikey}`;
+		const url2 = `${preUrl}forecast?q=${location}&appid=${apikey}`;
 		this.fetchToState(url2, 'requestForecast', 'requestDataLoaded'); //запрашиваем данные о прогнозе
 
 	}
@@ -85,8 +85,8 @@ class App extends React.Component {
 		const apikey = '2b0c757f5810cdb1eb3a945f283be600';
 		const preUrl = 'https://api.openweathermap.org/data/2.5/'
 
-		fetch(`https://json.geoiplookup.io/`) // обращаемся к API, который определяет ip юзера 
-			.then(res => res.json()).then(resp => { // и определяет по ним его локацию
+		fetch(`https://json.geoiplookup.io/`) // обращаемся к API, который определяет ip юзера и его локацию
+			.then(res => res.json()).then(resp => { 
 				this.setState({
 					localUserData: {
 						lat: resp.latitude,

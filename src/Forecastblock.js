@@ -19,7 +19,7 @@ export default class ForeCastBlock extends React.Component {
 		const filtered = this.props.requestForecast.list.filter(item => {
 			const data = new Date(item.dt_txt);
 			const hour = data.getHours();
-			return (hour === 6 || hour === 14 || hour === 22) ? item : null; //отфильтруем данные по трем часовым точкам
+			return (hour === 6 || hour === 15 || hour === 21) ? item : null; //отфильтруем данные по трем часовым точкам
 		})
 
 		//данные для отрисовки графика(ов)
@@ -76,7 +76,7 @@ export default class ForeCastBlock extends React.Component {
 			//далее проверяем данные дня (для начального и конечного), если они не на полный день, рисуем строку со сдвигом ячеек
 			if (!arr[0].dt_txt.includes('06:00')) {
 
-				if (!arr[0].dt_txt.includes('14:00')) {
+				if (!arr[0].dt_txt.includes('15:00')) {
 					return <>{tdDateJsx}<td></td><td></td>{arrToJsx}</>
 				}
 				return <>{tdDateJsx}<td></td>{arrToJsx}</>
@@ -85,7 +85,7 @@ export default class ForeCastBlock extends React.Component {
 		}
 
 		//хедер таблицы
-		const theader = <thead><tr><th></th><th>06:00</th><th>14:00</th><th>22:00</th></tr></thead>
+		const theader = <thead><tr><th></th><th>06:00</th><th>15:00</th><th>21:00</th></tr></thead>
 		// надпись на кнопке скрыть/показать
 		const showHidebut = this.state.isChartShown ? 'Hide chart' : 'Show temp chart below'
 		return (
