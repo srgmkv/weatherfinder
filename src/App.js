@@ -20,7 +20,7 @@ class App extends React.Component {
 			requestedLocation: "", // здесь храним location, по которой делаем поиск
 			requestCurrentWeather: {}, //погода по запрашиваемому месту
 			requestForecast: {}, // прогноз по запрашиваемому месту
-		};
+		}; 
 	}
 	//делаем поисковое поле ввода контролируемым, данные из него добавляем в requestedLocation
 	handleChange = (e) => {
