@@ -20,7 +20,7 @@ class App extends React.Component {
 			requestedLocation: "", // здесь храним location, по которой делаем поиск
 			requestCurrentWeather: {}, //погода по запрашиваемому месту
 			requestForecast: {}, // прогноз по запрашиваемому месту
-		}; 
+		};
 	}
 	//делаем поисковое поле ввода контролируемым, данные из него добавляем в requestedLocation
 	handleChange = (e) => {
@@ -55,7 +55,7 @@ class App extends React.Component {
 	updateFavListByTemp = (list) => {
 		this.setState({ favCitieslist: list });
 		localStorage.setItem('favlist', JSON.stringify(list));
-	}
+	}    
 
 
 	//вспомогательный метод для запроса данных с API и обнвления нужного стейта
@@ -86,7 +86,7 @@ class App extends React.Component {
 		const preUrl = 'https://api.openweathermap.org/data/2.5/'
 
 		fetch(`https://json.geoiplookup.io/`) // обращаемся к API, который определяет ip юзера и его локацию
-			.then(res => res.json()).then(resp => { 
+			.then(res => res.json()).then(resp => {
 				this.setState({
 					localUserData: {
 						lat: resp.latitude,
@@ -124,7 +124,7 @@ class App extends React.Component {
 											weatherData={localCurrentWeather} //передаем туда данные о погоде
 											handleClick={this.handleClick} //и обработчик для показа прогноза
 
-										/> : <div className="spinner-grow spinner-grow-sm"></div>} 
+										/> : <div className="spinner-grow spinner-grow-sm"></div>}
 								</div>
 								<Searchform // компонент выводящий и обрабатывающий действия с полем поиска
 									handleChange={this.handleChange} //передаем ввод в стейт
@@ -139,12 +139,12 @@ class App extends React.Component {
 										addToFav={this.addToFav} //обработчик добавления в избранное
 										removeFromFavList={this.removeFromFavList} // удаления из избранного
 										favCitieslist={this.state.favCitieslist} // стейт с избранным
-										
+
 									/>
 
 								}
 							</div>
-							<div className="col-sm-3 p-0 pb-2 favlist "> 
+							<div className="col-sm-3 p-0 pb-2 favlist ">
 								{this.state.favCitieslist.length > 0 &&  // отображаем избранное, если список не пуст
 									<Favlist //передаем в компонент данные и методы для работы со списком избранного
 										citiesList={this.state.favCitieslist}
