@@ -21,12 +21,13 @@ class App extends React.Component {
 			requestCurrentWeather: {}, //погода по запрашиваемому месту
 			requestForecast: {}, // прогноз по запрашиваемому месту
 		};
-	}
+	};
+
 	//делаем поисковое поле ввода контролируемым, данные из него добавляем в requestedLocation
 	handleChange = (e) => {
 		const { name, value } = e.target;
 		this.setState({ [name]: value.charAt(0).toUpperCase() + value.slice(1) })
-	}
+	};
 
 	//добавляем город из результата поиска в избранное
 	addToFav = () => {
@@ -41,7 +42,7 @@ class App extends React.Component {
 		const updList = unionBy(favList, locationToPush, 'locationId'); //используем ф-ю из lodash, добавляем локацию в избранное, если его там нет
 		this.setState({ favCitieslist: updList });
 		localStorage.setItem('favlist', JSON.stringify(updList));
-	}
+	};
 
 	//удаляем город из избранного
 	removeFromFavList = (id) => {
@@ -49,13 +50,13 @@ class App extends React.Component {
 		const updList = favList.filter(item => item.locationId !== id)
 		this.setState({ favCitieslist: updList });
 		localStorage.setItem('favlist', JSON.stringify(updList));
-	}
+	};
 
 	//обработчик для обновления значения температур в стейте /Избранное/
 	updateFavListByTemp = (list) => {
 		this.setState({ favCitieslist: list });
 		localStorage.setItem('favlist', JSON.stringify(list));
-	}    //********/
+	};
 
 
 	//вспомогательный метод для запроса данных с API и обнвления нужного стейта
@@ -158,7 +159,7 @@ class App extends React.Component {
 				</div>
 			</>
 		)
-	}
+	};
 }
 
 export default App;
