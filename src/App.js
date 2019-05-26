@@ -55,7 +55,7 @@ class App extends React.Component {
 	updateFavListByTemp = (list) => {
 		this.setState({ favCitieslist: list });
 		localStorage.setItem('favlist', JSON.stringify(list));
-	}    //************** */
+	}    //********/
 
 
 	//вспомогательный метод для запроса данных с API и обнвления нужного стейта
