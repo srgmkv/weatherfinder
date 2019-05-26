@@ -11,7 +11,6 @@ class App extends React.Component {
 		super();
 		this.state = {
 			localCurrentWeather: {}, //здесь сохраним данные о погоде в локации юзера
-			localForecast: {},  // прогноз по локации юзера
 			localUserData: { // данные о его локации
 				lat: null,
 				lon: null,
@@ -79,8 +78,9 @@ class App extends React.Component {
 		const url2 = `${preUrl}forecast?q=${location}&appid=${apikey}`;
 		this.fetchToState(url2, 'requestForecast', 'requestDataLoaded'); //запрашиваем данные о прогнозе
 
-	}
-	//данные метод запрашивет погоду по локации пользователя
+	};
+
+	//данный метод запрашивет погоду по локации пользователя
 	getUserLocalWeatherData = () => {
 		const apikey = '2b0c757f5810cdb1eb3a945f283be600';
 		const preUrl = 'https://api.openweathermap.org/data/2.5/'
@@ -98,10 +98,8 @@ class App extends React.Component {
 				const { lat, lon } = this.state.localUserData; //по этим данным запрашивается погоду для локации юзера
 				const url1 = `${preUrl}weather?lat=${lat}&lon=${lon}&appid=${apikey}`;
 				this.fetchToState(url1, 'localCurrentWeather', 'localDataLoaded');
-				const url2 = `${preUrl}forecast?lat=${lat}&lon=${lon}&appid=${apikey}`;
-				this.fetchToState(url2, 'localForecast', 'localDataLoaded');
 			})
-	}
+	};
 
 	componentWillMount() {
 		this.getUserLocalWeatherData(); //при загрузке показываем погоду в локации юзера
