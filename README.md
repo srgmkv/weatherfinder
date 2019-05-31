@@ -9,5 +9,5 @@
 
 Файлы компонентов (с комментариями) находятся в папке `/src`: 
 
-ДЕМО: ===> [здесь](https://srgmkv.github.io/weatherfinder/)  
+ДЕМО ===> [здесь](https://srgmkv.github.io/weatherfinder/)  
 Адаптивно, валидно на любых экранах
