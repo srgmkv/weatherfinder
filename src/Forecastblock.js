@@ -16,15 +16,27 @@ export default class ForeCastBlock extends React.Component {
 
 	render() {
 		//здесь будем работать с данными о прогнозе - рисовать по ним таблицу и график
-		const filtered = this.props.requestForecast.list.filter(item => {
-			const data = new Date(item.dt_txt);
-			const hour = data.getHours();
-			return (hour === 6 || hour === 15 || hour === 21) ? item : null; //отфильтруем данные по трем часовым точкам
+		const timezone = this.props.requestForecast.city.timezone;
+		const forecastData = this.props.requestForecast.list;
+		const forecastToLocalTime = forecastData.map(item => {
+			
+			item.local_dt = new Date((item.dt + timezone) * 1000);
+			item.hours = item.local_dt.getHours()
+    return item;
 		})
 
+		console.log('forecastToLocalTime', forecastToLocalTime)
+		const filtered = forecastToLocalTime.filter(item => {
+			
+			const data = item.local_dt;
+			const hour = data.getHours();
+			return (hour === 8 || hour === 14 || hour === 23) ? item : null; //отфильтруем данные по трем часовым точкам
+		})
+console.log('filtered', filtered)
 		//данные для отрисовки графика(ов)
 		const labels = filtered.map(item => {
-			const data = new Date(item.dt_txt)
+			const data = new Date(item.local_dt);
+
 			const date = data.getDate();
 			const month = data.getMonth();
 			const mlist = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -50,18 +62,24 @@ export default class ForeCastBlock extends React.Component {
 		};
 
 		/*вспомогательная функцию для отрисовки строк таблицы. Зная, что прогноз дается максимум на 5 дней, включая текущий,
-		будем передавать туда номер дня. Функция будет возвращать JSX, 
+		будем передавать туда шаг увеличения даты от 0 до 4. Функция будет возвращать JSX. 
 		*/
-		const filteredFunc = day => {
-			const curDay = day + new Date().getDate()
+		const filteredFunc = increment => {
+			//нормализуем формат дня/месяца для пограничных дат
+			const today = new Date();
+			const incrementDay = new Date(today.setDate(today.getDate() + increment));
 			const mlist = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-			const curMonth = mlist[new Date().getMonth()];
+			const curDay = incrementDay.getDate();
+			const curMonth = mlist[incrementDay.getMonth()];
+
 			//сортируем входящий массив по нужному дню
 			const arr = filtered.filter(item => {
-				const data = new Date(item.dt_txt);
+
+				const data = new Date(item.local_dt);
 				const date = data.getDate();
 				return date === curDay ? item : null;
-			})
+			});
+			console.log('arr', arr)
 			const tdDateJsx = <td className="date">{curDay} {curMonth}</td>
 			//формируем JSX для отрисовки строкитаблицы с данными
 			const arrToJsx = arr.map(item => {
@@ -74,9 +92,9 @@ export default class ForeCastBlock extends React.Component {
 
 			if (!arr.length) return; //если данных не хватило на 5 день, то не рисуем строку
 			//далее проверяем данные дня (для начального и конечного), если они не на полный день, рисуем строку со сдвигом ячеек
-			if (!arr[0].dt_txt.includes('06:00')) {
+			if (!arr[0].local_dt.toString().includes('08:00')) {
 
-				if (!arr[0].dt_txt.includes('15:00')) {
+				if (!arr[0].local_dt.toString().includes('14:00')) {
 					return <>{tdDateJsx}<td></td><td></td>{arrToJsx}</>
 				}
 				return <>{tdDateJsx}<td></td>{arrToJsx}</>
@@ -106,7 +124,7 @@ export default class ForeCastBlock extends React.Component {
 						</table>
 						<button className="showchart my-2" onClick={this.handlerClick}>{showHidebut}</button>
 					</div>
-				} 
+				}
 				{this.state.isChartShown && //показываем/скрываем график
 					<div className="chart">
 						<Line data={data} />
