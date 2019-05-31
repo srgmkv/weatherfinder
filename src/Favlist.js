@@ -54,8 +54,7 @@ class Favlist extends React.Component {
 
     return (
       <>
-        <div className="favhead bg-success text-white text-center pb-1 mb-1">Favorites </div>
-        {/* ендерим список избранного */}
+        {/* рендерим список избранного */}
         {favList}
 
       </>

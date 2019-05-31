@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css';
 import Weatherinfo from './Weatherinfo'; // компонент рендерит погоду и прогноз в искомом городе
-import LocalWeatherBlock from './Locweatherblock'; //рендерит текущую погоду в локации юзера
 import Searchform from './Searhform'; // рендерит форму для ввода поискового запроса
 import Favlist from './Favlist'; // рендерит список избранных городов
 import unionBy from 'lodash.unionby'; // возьмем ф-ю для добавления значения в массив, если оно уникально
@@ -16,9 +15,9 @@ class App extends React.Component {
 				lon: null,
 				locationName: null
 			},
-			favCitieslist: [], //список мест в избранное
+			favCitieslist: [], //список избранных локаций
 			requestedLocation: "", // здесь храним location, по которой делаем поиск
-			requestCurrentWeather: {}, //погода по запрашиваемому месту
+			requestCurrentWeather: {}, //текущая погода по запрашиваемому месту
 			requestForecast: {}, // прогноз по запрашиваемому месту
 		};
 	};
@@ -99,6 +98,7 @@ class App extends React.Component {
 				const { lat, lon } = this.state.localUserData; //по этим данным запрашивается погоду для локации юзера
 				const url1 = `${preUrl}weather?lat=${lat}&lon=${lon}&appid=${apikey}`;
 				this.fetchToState(url1, 'localCurrentWeather', 'localDataLoaded');
+				this.handleClick(this.state.localUserData.locationName);
 			})
 	};
 
@@ -106,6 +106,7 @@ class App extends React.Component {
 		this.getUserLocalWeatherData(); //при загрузке показываем погоду в локации юзера
 		const favlist = JSON.parse(localStorage.getItem('favlist')); //берем данные из localStorage
 		if (favlist) this.setState({ favCitieslist: favlist }); //если там не пусто, обновляем стейт для избранного
+	  this.setState({requestedLocation: this.state.localUserData.locationName});
 	};
 
 	render() {
@@ -119,14 +120,7 @@ class App extends React.Component {
 					<div className="container">
 						<div className="row">
 							<div className="col-sm-9 px-1">
-								<div className="local weather px-2 py-1">
-									{localCurrentWeather.cod === 200 ? //если данные о погоде получены, показываем блок с локальной погодой
-										<LocalWeatherBlock
-											weatherData={localCurrentWeather} //передаем туда данные о погоде
-											handleClick={this.handleClick} //и обработчик для показа прогноза
-
-										/> : <div className="spinner-grow spinner-grow-sm"></div>}
-								</div>
+					
 								<Searchform // компонент выводящий и обрабатывающий действия с полем поиска
 									handleChange={this.handleChange} //передаем ввод в стейт
 									handleClick={this.handleClick} // передаем обрабочик нажатия на кнопку *поиск*
@@ -146,6 +140,8 @@ class App extends React.Component {
 								}
 							</div>
 							<div className="col-sm-3 p-0 pb-2 favlist ">
+								<div className="favhead bg-success text-white text-center pb-1 mb-1">Favorites </div>
+        
 								{this.state.favCitieslist.length > 0 &&  // отображаем избранное, если список не пуст
 									<Favlist //передаем в компонент данные и методы для работы со списком избранного
 										citiesList={this.state.favCitieslist}

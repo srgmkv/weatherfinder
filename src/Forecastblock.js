@@ -16,27 +16,15 @@ export default class ForeCastBlock extends React.Component {
 
 	render() {
 		//здесь будем работать с данными о прогнозе - рисовать по ним таблицу и график
-		const timezone = this.props.requestForecast.city.timezone;
-		const forecastData = this.props.requestForecast.list;
-		const forecastToLocalTime = forecastData.map(item => {
-			
-			item.local_dt = new Date((item.dt + timezone) * 1000);
-			item.hours = item.local_dt.getHours()
-    return item;
+		const filtered = this.props.requestForecast.list.filter(item => {
+			const data = new Date(item.dt_txt);
+			const hour = data.getHours();
+			return (hour === 6 || hour === 15 || hour === 21) ? item : null; //отфильтруем данные по трем часовым точкам
 		})
 
-		console.log('forecastToLocalTime', forecastToLocalTime)
-		const filtered = forecastToLocalTime.filter(item => {
-			
-			const data = item.local_dt;
-			const hour = data.getHours();
-			return (hour === 8 || hour === 14 || hour === 23) ? item : null; //отфильтруем данные по трем часовым точкам
-		})
-console.log('filtered', filtered)
 		//данные для отрисовки графика(ов)
 		const labels = filtered.map(item => {
-			const data = new Date(item.local_dt);
-
+			const data = new Date(item.dt_txt)
 			const date = data.getDate();
 			const month = data.getMonth();
 			const mlist = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -62,7 +50,7 @@ console.log('filtered', filtered)
 		};
 
 		/*вспомогательная функцию для отрисовки строк таблицы. Зная, что прогноз дается максимум на 5 дней, включая текущий,
-		будем передавать туда шаг увеличения даты от 0 до 4. Функция будет возвращать JSX. 
+		будем передавать туда шаг увеличения дня от 0 до 4. Функция будет возвращать JSX, 
 		*/
 		const filteredFunc = increment => {
 			//нормализуем формат дня/месяца для пограничных дат
@@ -75,7 +63,7 @@ console.log('filtered', filtered)
 			//сортируем входящий массив по нужному дню
 			const arr = filtered.filter(item => {
 
-				const data = new Date(item.local_dt);
+				const data = new Date(item.dt_txt);
 				const date = data.getDate();
 				return date === curDay ? item : null;
 			});
@@ -92,9 +80,9 @@ console.log('filtered', filtered)
 
 			if (!arr.length) return; //если данных не хватило на 5 день, то не рисуем строку
 			//далее проверяем данные дня (для начального и конечного), если они не на полный день, рисуем строку со сдвигом ячеек
-			if (!arr[0].local_dt.toString().includes('08:00')) {
+			if (!arr[0].dt_txt.includes('06:00')) {
 
-				if (!arr[0].local_dt.toString().includes('14:00')) {
+				if (!arr[0].dt_txt.includes('15:00')) {
 					return <>{tdDateJsx}<td></td><td></td>{arrToJsx}</>
 				}
 				return <>{tdDateJsx}<td></td>{arrToJsx}</>
