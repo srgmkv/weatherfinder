@@ -106,12 +106,11 @@ class App extends React.Component {
 		this.getUserLocalWeatherData(); //при загрузке показываем погоду в локации юзера
 		const favlist = JSON.parse(localStorage.getItem('favlist')); //берем данные из localStorage
 		if (favlist) this.setState({ favCitieslist: favlist }); //если там не пусто, обновляем стейт для избранного
-	  this.setState({requestedLocation: this.state.localUserData.locationName});
+		this.setState({ requestedLocation: this.state.localUserData.locationName });
 	};
 
 	render() {
-		const { localCurrentWeather,
-			requestCurrentWeather, requestForecast } = this.state;
+		const { requestCurrentWeather, requestForecast } = this.state;
 
 		return (
 			<>
@@ -120,7 +119,7 @@ class App extends React.Component {
 					<div className="container">
 						<div className="row">
 							<div className="col-sm-9 px-1">
-					
+
 								<Searchform // компонент выводящий и обрабатывающий действия с полем поиска
 									handleChange={this.handleChange} //передаем ввод в стейт
 									handleClick={this.handleClick} // передаем обрабочик нажатия на кнопку *поиск*
@@ -141,7 +140,7 @@ class App extends React.Component {
 							</div>
 							<div className="col-sm-3 p-0 pb-2 favlist ">
 								<div className="favhead bg-success text-white text-center pb-1 mb-1">Favorites </div>
-        
+
 								{this.state.favCitieslist.length > 0 &&  // отображаем избранное, если список не пуст
 									<Favlist //передаем в компонент данные и методы для работы со списком избранного
 										citiesList={this.state.favCitieslist}
