@@ -9,6 +9,9 @@
 /coverage
 
 /src/Open-weather-main-page.png
+/.vscode
+/public
+.gitignore
 
 # misc
 .DS_Store
